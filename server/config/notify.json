@@ -1,0 +1,44 @@
+{
+  "action_url": "https://ryanliu.cn",
+  "source_desc": "状态面板",
+  "stale_rounds": 6,
+  "cards": {
+    "captcha": {
+      "title": "滑块验证码需人工处理",
+      "desc": "本次电量数据未更新。",
+      "severity": 2,
+      "fields": []
+    },
+    "auth": {
+      "title": "登录凭据未通过验证",
+      "desc": "本次电量数据未更新。",
+      "severity": 2,
+      "fields": []
+    },
+    "contract": {
+      "title": "学校系统返回内容异常",
+      "desc": "本次电量数据未更新。",
+      "severity": 2,
+      "fields": []
+    },
+    "stale": {
+      "title": "电量数据持续未更新",
+      "severity": 0,
+      "fields": [
+        [
+          "未更新次数",
+          "$count 次"
+        ],
+        [
+          "上次更新",
+          "$last_success"
+        ]
+      ]
+    },
+    "recovered": {
+      "title": "电量数据恢复更新",
+      "severity": 3,
+      "fields": []
+    }
+  }
+}

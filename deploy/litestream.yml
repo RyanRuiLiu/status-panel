@@ -1,0 +1,5 @@
+dbs:
+  - path: /var/lib/status-panel/status-panel.db
+    replicas:
+      - type: file
+        path: /var/backups/status-panel/litestream

@@ -1,0 +1,6 @@
+{
+  "machines": [
+    { "goods_id": "test-1", "label": "1号机" },
+    { "goods_id": "test-2", "label": "2号机" }
+  ]
+}

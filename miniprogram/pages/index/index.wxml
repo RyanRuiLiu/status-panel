@@ -1,0 +1,75 @@
+<!-- 电量卡片：剩余簇 / 用量簇 -->
+<view class="card electricity-card">
+  <block wx:if="{{card}}">
+    <view class="title-row">
+      <text class="card-title">电量</text>
+      <text class="row-note">{{card.updated}}</text>
+    </view>
+    <view class="balance-row">
+      <view class="balance-line">
+        <text class="balance-num">{{card.balance}}</text>
+        <text class="balance-unit">度</text>
+      </view>
+      <text class="row-note">{{card.estimated}}</text>
+    </view>
+    <view class="stats-row">
+      <view class="stat" wx:for="{{card.stats}}" wx:key="label">
+        <view class="stat-label">{{item.label}}</view>
+        <view class="stat-value">{{item.value}}</view>
+      </view>
+    </view>
+  </block>
+  <view wx:elif="{{electricityState === 'loading'}}" class="card-title">电量</view>
+  <view wx:elif="{{electricityState === 'failed'}}" class="card-title">电量</view>
+  <view wx:else class="card-title">电量</view>
+  <view
+    wx:if="{{!card}}"
+    class="empty-line"
+  >{{electricityState === 'loading' ? '加载中…' : electricityState === 'failed' ? '加载失败，下拉重试' : '暂无数据，下拉刷新'}}</view>
+</view>
+
+<!-- 洗衣机卡片 -->
+<view class="card laundry-card">
+  <block wx:if="{{laundry}}">
+    <view class="title-row">
+      <text class="card-title">洗衣机</text>
+      <text class="row-note">更新于 {{laundry.updatedAt}}</text>
+    </view>
+    <view class="stats-row">
+      <view class="stat" wx:for="{{laundry.machines}}" wx:key="name">
+        <view class="stat-label">{{item.name}}</view>
+        <view class="stat-value tone-{{item.tone}}">{{item.state}}</view>
+      </view>
+    </view>
+  </block>
+  <view wx:elif="{{laundryState === 'loading'}}" class="card-title">洗衣机</view>
+  <view wx:elif="{{laundryState === 'failed'}}" class="card-title">洗衣机</view>
+  <view wx:else class="card-title">洗衣机</view>
+  <view
+    wx:if="{{!laundry}}"
+    class="empty-line"
+  >{{laundryState === 'loading' ? '加载中…' : laundryState === 'failed' ? '加载失败，下拉重试' : '暂无数据，下拉刷新'}}</view>
+</view>
+
+<!-- 浴室卡片：喷头状态 + 数据快照时刻 -->
+<view class="card laundry-card">
+  <block wx:if="{{shower}}">
+    <view class="title-row">
+      <text class="card-title">浴室</text>
+      <text class="row-note">更新于 {{shower.updatedAt}}</text>
+    </view>
+    <view class="shower-row">
+      <view class="shower-stat" wx:for="{{shower.doors}}" wx:key="no">
+        <view class="stat-label">{{item.no}}</view>
+        <view class="stat-value small state-{{item.key}}">{{item.state}}</view>
+      </view>
+    </view>
+  </block>
+  <view wx:elif="{{showerState === 'loading'}}" class="card-title">浴室</view>
+  <view wx:elif="{{showerState === 'failed'}}" class="card-title">浴室</view>
+  <view wx:else class="card-title">浴室</view>
+  <view
+    wx:if="{{!shower}}"
+    class="empty-line"
+  >{{showerState === 'loading' ? '加载中…' : showerState === 'failed' ? '加载失败，下拉重试' : '暂无数据，下拉刷新'}}</view>
+</view>

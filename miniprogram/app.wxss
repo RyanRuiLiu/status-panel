@@ -1,0 +1,49 @@
+/** 全局样式：设计 Token（亮/暗双主题，跟随系统）。
+
+字阶锚点 = 微信官方设计指南常用字号（11/13/14/16/18/20pt）+ WeUI 正文 14px / 辅助 12px；
+rpx 与 px 换算为 2:1（750rpx 设计宽 = 375px）。全项目字号只允许引用以下变量。
+*/
+
+page {
+  /* 字阶 */
+  --font-note: 24rpx; /* 12px 辅助注记（官方最小可读档之上，弃 11pt） */
+  --font-body: 28rpx; /* 14px 正文（WeUI 正文） */
+  --font-title: 32rpx; /* 16px 列表标题（WeUI 同级） */
+  --font-hero: 88rpx; /* 44px 主数值（展示型大数字，非文本字阶） */
+
+  /* 颜色 */
+  --bg: #f6f7f9;
+  --card-bg: #ffffff;
+  --text: #1a1c20;
+  --text-sub: #8a8f99;
+  --accent: #2f6bff;
+  --danger: #e5484d;
+  --success: #16a34a; /* Tailwind 官方色板 green-600 */
+  --radius: 24rpx;
+  --shadow: 0 6rpx 24rpx rgba(0, 0, 0, 0.06);
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--font-body);
+}
+
+@media (prefers-color-scheme: dark) {
+  page {
+    --bg: #17181c;
+    --card-bg: #1f2127;
+    --text: #eceef2;
+    --text-sub: #7a7e87;
+    --accent: #6ea8ff;
+    --danger: #ff6369;
+    --success: #22c55e; /* Tailwind green-500（深色底同色板亮一档） */
+    --shadow: none;
+  }
+}
+
+/* 通用卡片 */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32rpx;
+  margin: 24rpx;
+}

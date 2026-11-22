@@ -1,0 +1,17 @@
+.git
+.github
+.zcode
+deploy
+miniprogram
+server/.venv
+server/.env
+server/.coverage
+server/.probe
+server/.pytest_cache
+server/.ruff_cache
+server/.mypy_cache
+server/.import_linter_cache
+server/__pycache__
+server/data
+server/tests
+server/scripts

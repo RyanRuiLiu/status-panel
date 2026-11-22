@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# 环境与本地
+.env
+.probe/
+.pytest_cache/
+.coverage/
+.ruff_cache/
+
+# 日志与数据
+logs/
+data/
+*.log
+*.db
+
+# 小程序
+node_modules/
+
+# 微信开发者工具（构建产物与个人配置，均不入库）
+miniprogram_npm/
+project.private.config.json
+
+# 微信开发者工具自动化测试产物
+minitest/
+
+# 编辑器/工具工作区配置
+.zcode/

@@ -1,0 +1,159 @@
+.electricity-card {
+  padding: 40rpx 32rpx;
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.card-title {
+  font-size: var(--font-title);
+  font-weight: 600;
+}
+
+.row-note {
+  font-size: var(--font-note);
+  color: var(--text-sub);
+}
+
+.balance-row {
+  margin-top: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.balance-line {
+  display: flex;
+  align-items: baseline;
+  gap: 10rpx;
+}
+
+.balance-num {
+  font-size: var(--font-hero);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.balance-unit {
+  font-size: var(--font-body);
+  color: var(--text-sub);
+}
+
+.stats-row {
+  margin-top: 40rpx;
+  display: flex;
+}
+
+.stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.stat-label {
+  font-size: var(--font-note);
+  color: var(--text-sub);
+}
+
+.stat-value {
+  font-size: var(--font-title);
+  font-weight: 600;
+}
+
+.empty-line {
+  margin-top: 32rpx;
+  font-size: var(--font-note);
+  color: var(--text-sub);
+}
+
+.tone-success {
+  color: var(--success);
+}
+
+.tone-danger {
+  color: var(--danger);
+}
+
+.tone-muted {
+  color: var(--text-sub);
+}
+
+/* 浴室喷头逐态着色（浅/深两套，取值参考 flash-app 同域模块） */
+.state-free {
+  color: #16a34a;
+}
+
+.state-selected {
+  color: #0d9488;
+}
+
+.state-waiting {
+  color: #2563eb;
+}
+
+.state-bathing {
+  color: #da7d06;
+}
+
+.state-paused {
+  color: #ea580c;
+}
+
+.state-repair,
+.state-disabled,
+.state-unknown {
+  color: #6b7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  .state-free {
+    color: #4ade80;
+  }
+
+  .state-selected {
+    color: #2dd4bf;
+  }
+
+  .state-waiting {
+    color: #60a5fa;
+  }
+
+  .state-bathing {
+    color: #fbc122;
+  }
+
+  .state-paused {
+    color: #fb923c;
+  }
+
+  .state-repair,
+  .state-disabled,
+  .state-unknown {
+    color: #9ca3af;
+  }
+}
+
+/* 浴室：喷头多于洗衣机台数，换行网格（每行 4 个） */
+.shower-row {
+  margin-top: 32rpx;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.shower-stat {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 20rpx;
+}
+
+.stat-value.small {
+  font-size: var(--font-body);
+}

@@ -1,0 +1,71 @@
+[project]
+name = "status-panel"
+version = "2.0.0"
+description = "状态面板"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "httpx>=0.28",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "beautifulsoup4>=4.15.0",
+    "tenacity>=9.2.1",
+    "cryptography>=50.0.2",
+    "sqlalchemy[asyncio]>=2.0",
+    "aiosqlite>=0.22.1",
+    "alembic>=1.20.1",
+    "apscheduler>=3.10,<4",
+]
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.414",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "pytest-cov>=7.1.0",
+    "respx>=0.21",
+    "ruff>=0.8",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["alembic/versions"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "N", "UP", "B", "C4", "SIM", "RUF"]
+# 中文注释与文档字符串按排版惯例使用全角标点，非歧义问题
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.per-file-ignores]
+# 探测/冒烟脚本：中文输出行不强制折行
+"scripts/*" = ["E501"]
+
+[tool.pyright]
+include = ["app", "tests"]
+exclude = [".venv"]
+typeCheckingMode = "strict"
+pythonVersion = "3.13"
+reportMissingTypeStubs = false  # apscheduler 3.x 无 py.typed
+
+# 测试目录：夹具参数类型由 pytest 注入，关闭 strict 特有的 unknown 系报告（其余检查保留）
+[[tool.pyright.executionEnvironments]]
+root = "tests"
+extraPaths = ["."]
+reportUnknownParameterType = "none"
+reportMissingParameterType = "none"
+reportUnknownArgumentType = "none"
+reportUnknownVariableType = "none"
+reportUnknownMemberType = "none"
+reportUnknownLambdaType = "none"
+reportMissingTypeArgument = "none"
+reportMissingTypeStubs = "none"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["."]
+
+[tool.coverage.run]
+source = ["app"]
