@@ -7,9 +7,9 @@ services:
     env_file:
       - status-panel.env
     environment:
-      DB_PATH: /var/lib/status-panel/status-panel.db
+      DB_PATH: /data/status-panel.db
     volumes:
-      - /var/lib/status-panel:/var/lib/status-panel
+      - ./data:/data
     read_only: true
     tmpfs:
       - /tmp
@@ -30,9 +30,9 @@ services:
     env_file:
       - status-panel.env
     environment:
-      DB_PATH: /var/lib/status-panel/status-panel.db
+      DB_PATH: /data/status-panel.db
     volumes:
-      - /var/lib/status-panel:/var/lib/status-panel
+      - ./data:/data
     read_only: true
     tmpfs:
       - /tmp
@@ -64,8 +64,8 @@ services:
     user: "33:33"
     command: ["replicate"]
     volumes:
-      - /var/lib/status-panel:/var/lib/status-panel
-      - /var/backups/status-panel/litestream:/var/backups/status-panel/litestream
+      - ./data:/data
+      - ./backup:/backup
       - ./deploy/litestream.yml:/etc/litestream.yml:ro
     read_only: true
     tmpfs:

@@ -7,8 +7,8 @@
 | 路径 | 内容 |
 |---|---|
 | `/opt/status-panel` | `compose.yaml`、`status-panel.env`、`deploy/litestream.yml`；Git 工作副本 |
-| `/var/lib/status-panel` | SQLite 数据库与 `-wal`、`-shm`，属主 33:33 |
-| `/var/backups/status-panel/litestream` | Litestream 文件副本，属主 33:33 |
+| `/opt/status-panel/data` | SQLite 数据库与 `-wal`、`-shm`（容器内 `/data`），属主 33:33 |
+| `/opt/status-panel/backup` | Litestream 文件副本（容器内 `/backup`），属主 33:33 |
 
 ## 镜像
 
@@ -45,14 +45,14 @@ deploy-app status-panel
 ```bash
 cd /opt/status-panel
 TAG=main docker compose stop status-panel
-mv /var/lib/status-panel/status-panel.db /var/lib/status-panel/status-panel.db.bak
-rm -f /var/lib/status-panel/status-panel.db-wal /var/lib/status-panel/status-panel.db-shm
+mv data/status-panel.db data/status-panel.db.bak
+rm -f data/status-panel.db-wal data/status-panel.db-shm
 docker run --rm \
-  -v /var/lib/status-panel:/var/lib/status-panel \
-  -v /var/backups/status-panel/litestream:/var/backups/status-panel/litestream \
+  -v /opt/status-panel/data:/data \
+  -v /opt/status-panel/backup:/backup \
   crpi-5rhaq5x8z5ec9tig-vpc.cn-hangzhou.personal.cr.aliyuncs.com/ryanruiliu/litestream:main \
-  restore -o /var/lib/status-panel/status-panel.db file:///var/backups/status-panel/litestream
-chown 33:33 /var/lib/status-panel/status-panel.db
+  restore -o /data/status-panel.db file:///backup
+chown 33:33 data/status-panel.db
 TAG=main docker compose up -d
 ```
 
@@ -60,4 +60,4 @@ TAG=main docker compose up -d
 
 - 单实例：SQLite 写锁与调度器均不支持多副本。
 - `config/laundry.json`、`config/notify.json` 打进镜像，改动需推送并发版。
-- 首次部署与换镜像后，`/var/lib/status-panel` 与 `/var/backups/status-panel/litestream` 的属主须为 33:33。
+- 首次部署与换镜像后，`data` 与 `backup` 目录的属主须为 33:33。

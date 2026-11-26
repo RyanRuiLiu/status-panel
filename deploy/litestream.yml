@@ -1,4 +1,4 @@
 dbs:
-  - path: /var/lib/status-panel/status-panel.db
+  - path: /data/status-panel.db
     replica:
-      path: /var/backups/status-panel/litestream
+      path: /backup
