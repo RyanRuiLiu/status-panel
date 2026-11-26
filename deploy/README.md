@@ -59,5 +59,6 @@ TAG=main docker compose up -d
 ## 要点
 
 - 单实例：SQLite 写锁与调度器均不支持多副本。
+- 禁止在生产目录执行 `git clean`：`data/` 与 `backup/` 为未跟踪的运行数据，`git clean -fdx` 会删除它们。
 - `config/laundry.json`、`config/notify.json` 打进镜像，改动需推送并发版。
 - 首次部署与换镜像后，`data` 与 `backup` 目录的属主须为 33:33。
