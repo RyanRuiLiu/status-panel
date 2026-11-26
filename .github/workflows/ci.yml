@@ -22,7 +22,9 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d  # v10.4.0
+      - run: uv lock --check
       - run: uv sync
+      - run: uv run python -c "import tomllib, importlib.metadata as metadata; from pathlib import Path; declared = tomllib.loads(Path('pyproject.toml').read_text(encoding='utf-8'))['project']['version']; installed = metadata.version('status-panel'); assert declared == installed, (declared, installed)"
       - run: uv run ruff check app tests
       - run: uv run ruff format --check app tests
       - run: uv run pyright
@@ -42,4 +44,5 @@ jobs:
           cache: npm
           cache-dependency-path: miniprogram/package-lock.json
       - run: npm ci
+      - run: node -e "const pkg = require('./package.json'); const lock = require('./package-lock.json'); if (pkg.version !== lock.version || pkg.version !== lock.packages[''].version) { throw new Error('version mismatch'); }"
       - run: npx tsc --noEmit

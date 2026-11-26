@@ -1,7 +1,8 @@
-"""status-panel 后端入口：组装全局设施与各域模块。"""
+"""status-panel 服务端入口：组装全局设施与各域模块。"""
 
 import logging
 from contextlib import asynccontextmanager
+from importlib.metadata import version
 
 import httpx
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -51,7 +52,7 @@ async def lifespan(app: FastAPI):
     await engine.dispose()
 
 
-app = FastAPI(title="status-panel", version="2.0.2", lifespan=lifespan)
+app = FastAPI(title="status-panel", version=version("status-panel"), lifespan=lifespan)
 app.include_router(electricity_router)
 
 

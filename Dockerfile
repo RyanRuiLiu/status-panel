@@ -6,6 +6,7 @@ COPY server/app ./app
 COPY server/config ./config
 COPY server/alembic ./alembic
 COPY server/alembic.ini ./
+RUN uv sync --frozen --no-dev
 
 FROM python:3.13-slim-bookworm
 WORKDIR /app

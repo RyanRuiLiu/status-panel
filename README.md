@@ -2,7 +2,7 @@
 
 ## 概述
 
-本项目提供宿舍电量查询与洗衣机状态展示。
+宿舍电量查询、洗衣机状态展示、浴室状态展示。
 
 ## 仓库结构
 
@@ -52,7 +52,7 @@ uv run ruff format --check app tests
 ### 运行环境
 
 | 项目 | 值 |
-|---|---|
+| --- | --- |
 | 应用目录 | `/opt/status-panel` |
 | 数据目录 | `/opt/status-panel/data`，容器内为 `/data` |
 | 备份目录 | `/opt/status-panel/backup`，容器内为 `/backup` |

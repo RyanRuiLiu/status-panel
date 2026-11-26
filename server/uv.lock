@@ -1058,7 +1058,7 @@ wheels = [
 [[package]]
 name = "status-panel"
 version = "2.0.2"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "aiosqlite" },
     { name = "alembic" },

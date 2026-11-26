@@ -1,3 +1,11 @@
+[build-system]
+requires = ["uv_build>=0.13.10,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "app"
+module-root = ""
+
 [project]
 name = "status-panel"
 version = "2.0.2"
