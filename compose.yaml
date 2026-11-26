@@ -1,7 +1,7 @@
 # 单实例约束：SQLite 写锁 + 调度器不可重复注册，禁止扩容副本数
 services:
   migrate:
-    image: crpi-5rhaq5x8z5ec9tig.cn-hangzhou.personal.cr.aliyuncs.com/ryanruiliu/status-panel:${STATUS_PANEL_TAG:?STATUS_PANEL_TAG must be set}
+    image: crpi-5rhaq5x8z5ec9tig-vpc.cn-hangzhou.personal.cr.aliyuncs.com/ryanruiliu/status-panel:${TAG:?TAG must be set}
     restart: "no"
     user: "33:33"
     env_file:
@@ -20,7 +20,7 @@ services:
     command: ["alembic", "upgrade", "head"]
 
   status-panel:
-    image: crpi-5rhaq5x8z5ec9tig.cn-hangzhou.personal.cr.aliyuncs.com/ryanruiliu/status-panel:${STATUS_PANEL_TAG:?STATUS_PANEL_TAG must be set}
+    image: crpi-5rhaq5x8z5ec9tig-vpc.cn-hangzhou.personal.cr.aliyuncs.com/ryanruiliu/status-panel:${TAG:?TAG must be set}
     container_name: status-panel
     depends_on:
       migrate:
@@ -31,8 +31,6 @@ services:
       - status-panel.env
     environment:
       DB_PATH: /var/lib/status-panel/status-panel.db
-    ports:
-      - "127.0.0.1:8120:8000"
     volumes:
       - /var/lib/status-panel:/var/lib/status-panel
     read_only: true
@@ -53,17 +51,22 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+    networks:
+      - web
 
   litestream:
-    image: litestream/litestream:0.3
+    image: crpi-5rhaq5x8z5ec9tig-vpc.cn-hangzhou.personal.cr.aliyuncs.com/ryanruiliu/litestream:${TAG:?TAG must be set}
     container_name: status-panel-litestream
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
     restart: unless-stopped
     user: "33:33"
-    command: ["replicate", "-config", "/etc/litestream/litestream.yml"]
+    command: ["replicate"]
     volumes:
       - /var/lib/status-panel:/var/lib/status-panel
       - /var/backups/status-panel/litestream:/var/backups/status-panel/litestream
-      - ./litestream.yml:/etc/litestream/litestream.yml:ro
+      - ./deploy/litestream.yml:/etc/litestream.yml:ro
     read_only: true
     tmpfs:
       - /tmp
@@ -76,3 +79,7 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+networks:
+  web:
+    external: true

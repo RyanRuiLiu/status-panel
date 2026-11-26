@@ -1,9 +1,5 @@
 name: docker
 
-# docker / build 是分支保护的 required check：PR 上必须每次都报告（GitHub 官方对
-# required check 的要求），不能做 paths 过滤——整个 workflow 被跳过时没有 check run，
-# 保护即无法满足。提速靠并发取消；main 上不取消——build→deploy 是生产链，
-# 中途取消会把部署掐在半路。
 concurrency:
   group: docker-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -11,23 +7,18 @@ concurrency:
 on:
   push:
     branches: [main]
-    tags: ["v*"]
   pull_request:
 
-# 顶层零权限：docker job 的 packages: write 自行声明；其余 job 一律不领令牌——
-# 依赖 Actions 默认值的继承面是权限审计的盲区，显式声明为零。
 permissions: {}
 
 jobs:
   docker:
     permissions:
       contents: read
-      packages: write
-    uses: RyanRuiLiu/.github/.github/workflows/docker.yml@52617eaa392db38edad582cf088998fc7e63fdf2
-    # registry/namespace 是部署侧私有值（同 compose 的 STATUS_PANEL_TAG 指向的
-    # ACR 仓库）：经 secrets 块传入（workflow_call 的 with: 不支持 secrets 上下文），
-    # 公开文件里只剩表达式，值由仓库 secrets 持有。共享仓对空值回退合法 local 名——
-    # fork PR 拿不到 secrets 也能完成 build-only 校验。
+    uses: RyanRuiLiu/.github/.github/workflows/docker.yml@9e85e2e21780ed63ba09054f504a8d2139d87a9d
+    with:
+      tags: |
+        type=ref,event=branch
     secrets:
       ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
       ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}

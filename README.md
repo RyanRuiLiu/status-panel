@@ -8,7 +8,7 @@
 status-panel/
 ├── server/        # FastAPI 后端（uv 管理，含契约测试）
 ├── miniprogram/   # 微信小程序（原生 TypeScript）
-└── deploy/        # 部署资产唯一事实来源（compose / Dockerfile / litestream / nginx / CI）
+└── deploy/        # 部署说明与 Litestream 配置
 ```
 
 ## 后端开发
@@ -20,7 +20,7 @@ cp .env.example .env   # 本地开发值；生产值不入库（密文在 infra 
 uv run uvicorn app.main:app --reload --port 8120
 uv run pytest          # 契约测试
 uv run pyright         # 严格类型检查
-uv run ruff check app tests scripts
+uv run ruff check app tests
 ```
 
 健康检查：`GET /healthz`
@@ -33,8 +33,7 @@ uv run ruff check app tests scripts
 
 ## 部署与发布
 
-- 服务端：唯一事实来源 [`deploy/README.md`](deploy/README.md)——CI 产 `sha-<短哈希>` tag，
-  `STATUS_PANEL_TAG=<tag> docker compose up -d`；回滚 = 指回上一 tag
+- 服务端：推送 `main` 后由 CI 构建并部署，说明见 [`deploy/README.md`](deploy/README.md)
 - 小程序：真机回归（电量三卡 + 洗衣机）→ 微信开发者工具上传 → 提审
 
 约束：单实例（SQLite 写锁 + 调度器不可重复注册），禁止扩容副本。
