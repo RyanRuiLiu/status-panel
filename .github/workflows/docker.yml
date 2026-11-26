@@ -24,3 +24,15 @@ jobs:
       ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
       ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
       ACR_NAMESPACE: ${{ secrets.ACR_NAMESPACE }}
+
+  deploy:
+    needs: docker
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    concurrency:
+      group: deploy-status-panel
+      cancel-in-progress: false
+    uses: RyanRuiLiu/.github/.github/workflows/deploy.yml@655a30434585fe049b55d25aaee77ad1caeddcc8
+    with:
+      hook: deploy-status-panel
+    secrets:
+      WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
