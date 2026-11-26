@@ -51,7 +51,7 @@ async def lifespan(app: FastAPI):
     await engine.dispose()
 
 
-app = FastAPI(title="status-panel", version="2.0.0", lifespan=lifespan)
+app = FastAPI(title="status-panel", version="2.0.2", lifespan=lifespan)
 app.include_router(electricity_router)
 
 
