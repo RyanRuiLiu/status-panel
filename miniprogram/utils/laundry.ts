@@ -22,17 +22,17 @@ const DETAILS_URL = 'https://userapi.qiekj.com/goods/normal/details'
 
 /** 已知错误码 → 状态词（厂商 App 官方字面量的短语形态）。 */
 const ERROR_STATE: Record<string, { text: string; tone: 'danger' | 'muted' }> = {
-  '2': { text: '工作中', tone: 'danger' },
+  '2': { text: '使用中', tone: 'danger' },
   '4': { text: '故障', tone: 'danger' },
-  '7': { text: '被预约', tone: 'muted' },
+  '7': { text: '已预约', tone: 'muted' },
   '8': { text: '离线', tone: 'muted' },
+  '10': { text: '故障', tone: 'danger' },
   '12': { text: '离线', tone: 'muted' },
-  '4204': { text: '离线', tone: 'muted' },
+  '13': { text: '故障', tone: 'danger' },
   '4000': { text: '未绑定', tone: 'muted' },
   '4107': { text: '故障', tone: 'danger' },
-  '4111': { text: '停用', tone: 'muted' },
-  '10': { text: '故障', tone: 'danger' },
-  '13': { text: '故障', tone: 'danger' },
+  '4111': { text: '已停用', tone: 'muted' },
+  '4204': { text: '离线', tone: 'muted' },
 }
 
 export interface MachineView {
@@ -64,7 +64,7 @@ function toView(machine: LaundryMachine, data: DetailsEnvelope['data']): Machine
     if (data.soldState === 2) {
       return { name, state: '使用中', tone: 'danger' }
     }
-    return { name, state: '可用', tone: 'success' }
+    return { name, state: '空闲', tone: 'success' }
   }
   const known = ERROR_STATE[err]
   if (known) {
