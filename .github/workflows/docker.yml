@@ -31,7 +31,7 @@ jobs:
     concurrency:
       group: deploy-status-panel
       cancel-in-progress: false
-    uses: RyanRuiLiu/.github/.github/workflows/deploy.yml@655a30434585fe049b55d25aaee77ad1caeddcc8
+    uses: RyanRuiLiu/.github/.github/workflows/deploy.yml@169a0eb839dd876dbe30a5dd9aa5bd843c73190b
     with:
       hook: deploy-status-panel
     secrets:
