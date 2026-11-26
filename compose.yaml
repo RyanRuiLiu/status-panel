@@ -66,7 +66,7 @@ services:
     volumes:
       - ./data:/data
       - ./backup:/backup
-      - ./deploy/litestream.yml:/etc/litestream.yml:ro
+      - ./litestream.yml:/etc/litestream.yml:ro
     read_only: true
     tmpfs:
       - /tmp

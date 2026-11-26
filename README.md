@@ -1,50 +1,74 @@
 # status-panel
 
-南通大学宿舍生活服务：宿舍电量查询、洗衣机状态、微信身份兑换（供 ntu-shower 作 `X-Identity`）。
+## 概述
 
-## 目录结构
+本项目提供宿舍电量查询与洗衣机状态展示。
+
+## 仓库结构
 
 ```
 status-panel/
-├── server/        # FastAPI 后端（uv 管理，含契约测试）
-├── miniprogram/   # 微信小程序（原生 TypeScript）
-└── deploy/        # 部署说明与 Litestream 配置
+├── .github/workflows/  # CI、镜像构建与部署工作流调用
+├── server/             # FastAPI 服务、配置与测试
+├── miniprogram/        # 微信小程序客户端
+├── compose.yaml        # 应用编排定义
+├── Dockerfile          # 服务端镜像定义
+├── litestream.yml      # Litestream 副本定义
+└── README.md
 ```
 
-## 后端开发
+## 开发
+
+### 后端
 
 ```bash
 cd server
-uv sync                # 安装依赖
-cp .env.example .env   # 本地开发值；生产值不入库（密文在 infra secrets/）
-uv run uvicorn app.main:app --reload --port 8120
-uv run pytest          # 契约测试
-uv run pyright         # 严格类型检查
-uv run ruff check app tests
+uv sync
+cp .env.example .env
+uv run uvicorn app.main:app --reload --port 8000
 ```
 
-健康检查：`GET /healthz`
+校验命令：
 
-## 小程序开发
+```bash
+uv run pytest --cov=app --cov-report=term-missing
+uv run pyright
+uv run ruff check app tests
+uv run ruff format --check app tests
+```
 
-1. 微信开发者工具 → 导入项目 → 目录选 `miniprogram/`（AppID 已配置）
-2. 详情 → 本地设置 → 勾选「不校验合法域名」（开发期连本地后端）
-3. `config.ts` 的 `BASE_URL` 当前为生产域名；本地联调改为 `http://127.0.0.1:8120`（不提交）
+健康检查端点为 `GET /healthz`。
 
-## 部署与发布
+### 小程序
 
-- 服务端：推送 `main` 后由 CI 构建并部署，说明见 [`deploy/README.md`](deploy/README.md)
-- 小程序：真机回归（电量三卡 + 洗衣机）→ 微信开发者工具上传 → 提审
+参见 `miniprogram/README.md`。
 
-约束：单实例（SQLite 写锁 + 调度器不可重复注册），禁止扩容副本。
+## 部署
 
-## 工程守则（红线）
+### 触发
 
-- **禁止兜底、防御式编程、兼容层**：单一直线路径；异常只在真实失败模式上抛出；
-  不写"以防万一"的分支、备用数据源、格式兼容、静默吞错
-- **禁止推断**：外部系统的事实必须来自实测验证（探测/真实响应/源码逆向），
-  每条标注验证方式；未验证的假设不得写进代码与文档
-- **依赖与版本一律实测查询**（npm registry / 官方文档），不凭记忆
-- **注释规范**：自包含（不引用文档编号，防漂移）；只写 why 不写 what；
-  行为契约由契约测试承载（测试名即文档）；验证过程叙事只进 FACTS.md 不进代码
-- 外部系统对接改版：先重验事实再改代码
+推送 `main` 后，`docker` 工作流构建镜像并调用共享部署工作流；服务器执行 `deploy-app status-panel`。工作流定义位于 `.github/workflows/`，共享工作流位于 `.github` 仓库。
+
+### 运行环境
+
+| 项目 | 值 |
+|---|---|
+| 应用目录 | `/opt/status-panel` |
+| 数据目录 | `/opt/status-panel/data`，容器内为 `/data` |
+| 备份目录 | `/opt/status-panel/backup`，容器内为 `/backup` |
+| 环境文件 | `/opt/status-panel/status-panel.env` |
+| 镜像 | 见 `compose.yaml`，标签为 `main` |
+
+容器用户与运行数据属主均为 33:33。
+
+### 手动部署
+
+```bash
+deploy-app status-panel
+```
+
+## 约束
+
+- 应用以单实例运行；SQLite 写锁与调度器均不支持多副本。
+- `data/` 与 `backup/` 为未跟踪的运行数据目录；不得在应用目录执行 `git clean -fdx`。
+- `server/config/` 下的静态配置随镜像发布；修改后须重新构建并部署。
